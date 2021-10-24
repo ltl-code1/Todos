@@ -8,14 +8,18 @@ export default new Vuex.Store({
 		count: 0
 	},
 	mutations: {
-		add(state) {
-			state.count++
+		add(state, num) {
+			state.count += num
 		},
 		sub(state, num) {
 			state.count -= num
 		}
 	},
 	actions: {
-		
+		addAsync(context, num) {
+			setTimeout(function() {
+				context.commit('add', num)
+			}, 1000)
+		}
 	}
 })

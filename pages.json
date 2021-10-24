@@ -3,7 +3,8 @@
 		{
 			"path": "pages/index/index",
 			"style": {
-				"navigationBarTitleText": "Todos"
+				"navigationBarBackgroundColor":"#2C2E2B",
+				"navigationBarTextStyle":"#fff"
 			}
 		}
 	],
