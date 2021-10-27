@@ -3,29 +3,23 @@
 		<view class="header">
 			<text class="title">待完成：0</text>
 			<view class="todo-container">
-				<input class="todo-input" type="text" placeholder="添加Todo" />
-				<button class="todo-btn" size="mini">添加</button>
+				<input class="todo-input" type="text" v-model="inputVal" placeholder="添加Todo" />
+				<button class="todo-btn" size="mini" @click="setTodos(inputVal)">添加</button>
 			</view>
 		</view>
 		<view class="main">
-			<checkbox-group class="list">
-				<label class="list-label">
+			<checkbox-group class="list" v-for="item in todos">
+				<label class="list-label"> 
 					<view class="list-content">
 						<checkbox class="list-checkbox" :value="1" />
-						<text class="list-text">学习Vue</text>
+						<text class="list-text">{{item.title}}</text>
 					</view>
 					<text class="iconfont icon-shanchu list-remove"></text>
 				</label>
 			</checkbox-group>
-			<checkbox-group class="list">
-				<label class="list-label">
-					<view class="list-content">
-						<checkbox class="list-checkbox" :value="1" />
-						<text class="list-text">学习Vue</text>
-					</view>
-					<text class="iconfont icon-shanchu list-remove"></text>
-				</label>
-			</checkbox-group>
+		</view>
+		<view class="">
+			{{val}}
 		</view>
 		<view class="footer">
 			
@@ -34,22 +28,27 @@
 </template>
 
 <script>
-	
+	import { mapState, mapMutations } from 'vuex'
 	
 	export default {
 		data() {
 			return {
-				
+				val: 0,
+				inputVal: ''
 			}
 		},
 		components: {
 			
 		},
+		computed:{
+			...mapState(['todos'])
+		},
 		onLoad() {
-
+			this.getTodos()
 		},
 		methods: {
-
+			...mapMutations(['getTodos', 'setTodos']),
+			
 		}
 	}
 </script>
