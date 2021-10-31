@@ -18,9 +18,6 @@
 				</label>
 			</checkbox-group>
 		</view>
-		<view class="">
-			{{val}}
-		</view>
 		<view class="footer">
 			
 		</view>
@@ -33,7 +30,6 @@
 	export default {
 		data() {
 			return {
-				val: 0,
 				inputVal: ''
 			}
 		},
@@ -44,6 +40,7 @@
 			...mapState(['todos'])
 		},
 		onLoad() {
+			// plus.storage.setItem('todos', '[{"title":"a"}]'); 
 			this.getTodos()
 		},
 		methods: {
@@ -91,8 +88,8 @@
 			margin: 40rpx;
 			
 			.list{
-				height: 70rpx;
-				margin: 20rpx 0;
+				height: 100rpx;
+				margin: 30rpx 0;
 				border-left: 10rpx solid #64958E;
 				background-color: #F9FBF8;
 				
@@ -113,6 +110,7 @@
 					.list-remove{
 						margin-right: 20rpx;
 						padding: 8rpx;
+						color: #999;
 					}
 				}
 			}
