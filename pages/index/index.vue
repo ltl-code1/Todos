@@ -161,7 +161,7 @@
 		
 		.main{
 			margin: 40rpx;
-			margin-bottom: 100rpx;
+			margin-bottom: 150rpx;
 			
 			.list{
 				height: 100rpx;
