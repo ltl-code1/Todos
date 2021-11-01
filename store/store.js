@@ -33,9 +33,8 @@ export default new Vuex.Store({
 			}else{
 				checked = true
 			}
-			state.todos[index].checked = checked;
+			Vue.set(state.todos[index], 'checked', checked);
 			this.commit('setItem');
-			this.commit('getTodos');
 		},
 		setItem(state) {
 			plus.storage.setItem('todos', JSON.stringify(state.todos));

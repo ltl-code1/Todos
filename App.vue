@@ -1,13 +1,13 @@
 <script>
 	export default {
 		onLaunch: function() {
-			console.log('App Launch')
+			// console.log('App Launch')
 		},
 		onShow: function() {
-			console.log('App Show')
+			// console.log('App Show')
 		},
 		onHide: function() {
-			console.log('App Hide')
+			// console.log('App Hide')
 		}
 	}
 </script>
@@ -20,29 +20,37 @@
 	       url('./static/font/iconfont.ttf?t=1635341624299') format('truetype');
 	}
 	
-	.iconfont {
-	  font-family: "iconfont" !important;
-	  font-size: 16px;
-	  font-style: normal;
-	  -webkit-font-smoothing: antialiased;
-	  -moz-osx-font-smoothing: grayscale;
-	}
-	
-	.icon-suoyou:before {
-	  content: "\e62c";
-	}
-	
-	.icon-order-completed_fill:before {
-	  content: "\e7fb";
-	}
-	
-	.icon-order-incomplete:before {
-	  content: "\e7fc";
-	}
-	
-	.icon-shanchu:before {
-	  content: "\e74b";
-	}
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-duoxuankuang:before {
+  content: "\e68c";
+}
+
+.icon-duoxuankuang1:before {
+  content: "\e61c";
+}
+
+.icon-suoyou:before {
+  content: "\e62c";
+}
+
+.icon-order-completed_fill:before {
+  content: "\e7fb";
+}
+
+.icon-order-incomplete:before {
+  content: "\e7fc";
+}
+
+.icon-shanchu:before {
+  content: "\e74b";
+}
 	
 
 </style>

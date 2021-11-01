@@ -8,18 +8,17 @@
 			</view>
 		</view>
 		<view class="main">
-			<checkbox-group class="list" v-for="item in showTodos" :key="item.id" @change="checkboxChange(item.id)">
-				<label class="list-label"> 
+			<view class="list" :key="item.id" v-for="item in showTodo" @click="checkboxChange(item.id)">
+				<view class="list-label">
 					<view class="list-content">
-						<checkbox class="list-checkbox" :value="1" :checked="item.checked"/>
+						<view class="list-checkbox">
+							<text class="iconfont" :class="[item.checked ? checkedboxStyle : checkboxStyle]"></text>
+						</view>
 						<text class="list-text">{{item.title}}</text>
 					</view>
 					<text class="iconfont icon-shanchu list-remove" @click.stop="useRemoveTodoList(item.id)"></text>
-				</label>
-			</checkbox-group>
-		</view>
-		<view>
-			{{showTodos}}
+				</view>
+			</view>
 		</view>
 		<view class="footer">
 			<view class="show-all" @click="checkNavList(0)">
@@ -48,7 +47,8 @@
 				inputVal: '',
 				footerNavClass: 'footer-nav',
 				footerNavPosition: 0,
-				ada: []
+				checkboxStyle: 'icon-duoxuankuang icon-check',
+				checkedboxStyle: 'icon-duoxuankuang1 icon-checked',
 			}
 		},
 		components: {
@@ -64,6 +64,26 @@
 					}
 				}
 				return unfinishedNum;
+			},
+			showTodo() {
+				let list = [];
+				if(this.footerNavPosition == 0){
+					return this.todos;
+				}else if(this.footerNavPosition == 1){
+					for (let i = 0; i < this.todos.length; i++) {
+						if(!this.todos[i].checked){
+							list.push(this.todos[i])
+						}
+					}
+					return list;
+				}else{
+					for (let i = 0; i < this.todos.length; i++) {
+						if(this.todos[i].checked){
+							list.push(this.todos[i])
+						}
+					}
+					return list;
+				}
 			}
 		},
 		onLoad() {
@@ -81,7 +101,6 @@
 			},
 			useRemoveTodoList(id) {
 				let index = this.getIndex(this.todos, id);
-				this.ada = index;
 				this.removeTodoList(index);
 			},
 			checkboxChange(id) {
@@ -89,27 +108,8 @@
 				this.checkChange(index);
 			},
 			checkNavList(index) {
-				let list = [];
-				if(index == 0){
-					this.footerNavPosition = 0;
-					this.showTodos = this.todos;
-				}else if(index == 1){
-					this.footerNavPosition = 1;
-					for (let i = 0; i < this.todos.length; i++) {
-						if(!this.todos[i].checked){
-							list.push(this.todos[i])
-						}
-					}
-					this.showTodos = list;
-				}else{
-					this.footerNavPosition = 2;
-					for (let i = 0; i < this.todos.length; i++) {
-						if(this.todos[i].checked){
-							list.push(this.todos[i])
-						}
-					}
-					this.showTodos = list;
-				}
+				this.footerNavPosition = index;
+				
 			},
 			getRandom(min, max) {
 				return parseInt(Math.random() * (max - min + 1) + min)
@@ -176,8 +176,28 @@
 					height: 100%;
 					
 					.list-content{
+						display: flex;
+						align-items: center;
+						
 						.list-checkbox{
+							display: inline-block;
+							width: 50rpx;
+							height: 50rpx;
 							margin: 0 20rpx 0 30rpx;
+							
+							.icon-check{
+								font-size: 50rpx;
+								color: #ccc;
+							}
+							
+							.icon-checked{
+								font-size: 50rpx;
+								color: #64958E;
+							}
+						}
+						
+						.listCheckboxChecked{
+							border: 1px solid #f00;
 						}
 						.list-text{
 							font-size: 28rpx;
