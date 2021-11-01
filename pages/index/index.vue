@@ -1,25 +1,39 @@
 <template>
 	<view class="content">
 		<view class="header">
-			<text class="title">待完成：0</text>
+			<text class="title">待完成：{{unfinished}}</text>
 			<view class="todo-container">
 				<input class="todo-input" type="text" v-model="inputVal" placeholder="添加Todo" />
-				<button class="todo-btn" size="mini" @click="setTodos(inputVal)">添加</button>
+				<button class="todo-btn" size="mini" @click="useSetTodos(inputVal)">添加</button>
 			</view>
 		</view>
 		<view class="main">
-			<checkbox-group class="list" v-for="item in todos">
+			<checkbox-group class="list" v-for="item in showTodos" :key="item.id" @change="checkboxChange(item.id)">
 				<label class="list-label"> 
 					<view class="list-content">
-						<checkbox class="list-checkbox" :value="1" />
+						<checkbox class="list-checkbox" :value="1" :checked="item.checked"/>
 						<text class="list-text">{{item.title}}</text>
 					</view>
-					<text class="iconfont icon-shanchu list-remove"></text>
+					<text class="iconfont icon-shanchu list-remove" @click.stop="useRemoveTodoList(item.id)"></text>
 				</label>
 			</checkbox-group>
 		</view>
+		<view>
+			{{showTodos}}
+		</view>
 		<view class="footer">
-			
+			<view class="show-all" @click="checkNavList(0)">
+				<text class="iconfont icon-suoyou footer-icon" :class="[footerNavPosition == 0 ? footerNavClass : '']"></text>
+				<text class="footer-text" :class="[footerNavPosition == 0 ? footerNavClass : '']">全部</text>
+			</view>
+			<view class="show-unfinish" @click="checkNavList(1)">
+				<text class="iconfont icon-order-completed_fill footer-icon" :class="[footerNavPosition == 1 ? footerNavClass : '']"></text>
+				<text class="footer-text" :class="[footerNavPosition == 1 ? footerNavClass : '']">未完成</text>
+			</view>
+			<view class="show-finished" @click="checkNavList(2)">
+				<text class="iconfont icon-order-incomplete footer-icon" :class="[footerNavPosition == 2 ? footerNavClass : '']"></text>
+				<text class="footer-text" :class="[footerNavPosition == 2 ? footerNavClass : '']">已完成</text>
+			</view>
 		</view>
 	</view>
 </template>
@@ -30,22 +44,83 @@
 	export default {
 		data() {
 			return {
-				inputVal: ''
+				showTodos: [],
+				inputVal: '',
+				footerNavClass: 'footer-nav',
+				footerNavPosition: 0,
+				ada: []
 			}
 		},
 		components: {
 			
 		},
 		computed:{
-			...mapState(['todos'])
+			...mapState(['todos']),
+			unfinished: function() {
+				let unfinishedNum = 0;
+				for (let i = 0; i < this.todos.length; i++) {
+					if(!this.todos[i].checked){
+						unfinishedNum++;
+					}
+				}
+				return unfinishedNum;
+			}
 		},
 		onLoad() {
-			// plus.storage.setItem('todos', '[{"title":"a"}]'); 
-			this.getTodos()
+			
+			this.getTodos();
+			this.showTodos = this.todos;
+			// plus.storage.removeItem('todos');
 		},
 		methods: {
-			...mapMutations(['getTodos', 'setTodos']),
-			
+			...mapMutations(['getTodos', 'setTodos', 'removeTodoList', 'checkChange']),
+			useSetTodos(inputVal) {
+				let idNum = this.getRandom(1, 9999999999);
+				this.setTodos({inputVal: inputVal, idNum: idNum});
+				this.inputVal = '';
+			},
+			useRemoveTodoList(id) {
+				let index = this.getIndex(this.todos, id);
+				this.ada = index;
+				this.removeTodoList(index);
+			},
+			checkboxChange(id) {
+				let index = this.getIndex(this.todos, id);
+				this.checkChange(index);
+			},
+			checkNavList(index) {
+				let list = [];
+				if(index == 0){
+					this.footerNavPosition = 0;
+					this.showTodos = this.todos;
+				}else if(index == 1){
+					this.footerNavPosition = 1;
+					for (let i = 0; i < this.todos.length; i++) {
+						if(!this.todos[i].checked){
+							list.push(this.todos[i])
+						}
+					}
+					this.showTodos = list;
+				}else{
+					this.footerNavPosition = 2;
+					for (let i = 0; i < this.todos.length; i++) {
+						if(this.todos[i].checked){
+							list.push(this.todos[i])
+						}
+					}
+					this.showTodos = list;
+				}
+			},
+			getRandom(min, max) {
+				return parseInt(Math.random() * (max - min + 1) + min)
+			},
+			getIndex(todos, id) {
+				for (let i = 0; i < todos.length; i++) {
+					if(todos[i].id == id){
+						return i;
+					}
+				}
+			}
 		}
 	}
 </script>
@@ -86,6 +161,7 @@
 		
 		.main{
 			margin: 40rpx;
+			margin-bottom: 100rpx;
 			
 			.list{
 				height: 100rpx;
@@ -117,12 +193,42 @@
 		}
 		
 		.footer{
+			display: flex;
+			justify-content: space-around;
 			position: fixed;
 			bottom: 0;
 			left: 0;
 			width: 100%;
 			height: 100rpx;
-			box-shadow: 0 0 10rpx rgba(0, 0, 0, 0.2);
+			padding-top: 16rpx;
+			box-shadow: 0 0 20rpx rgba(0, 0, 0, 0.2);
+			z-index: 9;
+			background-color: #CACCC9;
+			
+			.show-all, .show-unfinish, .show-finished{
+				text-align: center;
+				
+				.footer-icon{
+					display: block;
+					font-size: 50rpx;
+					color: #333;
+				}
+				
+				.footer-text{
+					font-size: 30rpx;
+				}
+			}
+			
+			.show-all{
+				.footer-icon{
+					font-size: 40rpx;
+					margin: 6rpx 0 6rpx;
+				}
+			}
+			
+			.footer-nav{
+				color: #64958E !important;
+			}
 		}
 	}
 </style>

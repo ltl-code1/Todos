@@ -8,37 +8,37 @@ export default new Vuex.Store({
 		todos: []
 	},
 	mutations: {
-		add(state, num) {
-			state.count += num
-		},
-		sub(state, num) {
-			state.count -= num
-		},
 		getTodos(state) {
 			let todos = plus.storage.getItem("todos");
 			if(todos !== null){
 				state.todos = JSON.parse(todos);
 			}else{
-				state.todos =[
-					{
-						title: '无内容'
-					}
-				]
+				plus.storage.setItem('todos', '[]');
 			}
 		},
-		setTodos(state, inputVal) {
-			console.log(inputVal)
-			if(inputVal !== ''){
-				state.todos.push({title: inputVal});
-				plus.storage.setItem('todos', JSON.stringify(state.todos));
+		setTodos(state, para) {
+			if(para.inputVal !== ''){
+				state.todos.push({"id": para.idNum, "title": para.inputVal});
+				this.commit('setItem');
 			}
-		}
-	},
-	actions: {
-		addAsync(context, num) {
-			setTimeout(function() {
-				context.commit('add', num)
-			}, 1000)
+		},
+		removeTodoList(state, index){
+			state.todos.splice(index, 1);
+			this.commit('setItem');
+		},
+		checkChange(state, index) {
+			let checked = state.todos[index].checked;
+			if(checked){
+				checked = undefined;
+			}else{
+				checked = true
+			}
+			state.todos[index].checked = checked;
+			this.commit('setItem');
+			this.commit('getTodos');
+		},
+		setItem(state) {
+			plus.storage.setItem('todos', JSON.stringify(state.todos));
 		}
 	}
 })
